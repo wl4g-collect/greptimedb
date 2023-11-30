@@ -31,6 +31,10 @@ inputs:
     description: Build dev-builder-android image
     required: false
     default: 'true'
+  build-legacy-dev-builders:
+    description: Build legacy dev-builder images
+    required: false
+    default: 'false'
 runs:
   using: composite
   steps:
@@ -74,3 +78,13 @@ runs:
           IMAGE_TAG=${{ inputs.version }} && \
         
         docker push ${{ inputs.dockerhub-image-registry }}/${{ inputs.dockerhub-image-namespace }}/dev-builder-android:${{ inputs.version }}
+
+    - name: Build and push legacy dev-builder images
+      shell: bash
+      if: ${{ inputs.build-legacy-dev-builders == 'true' }}
+      run: |
+        make legacy-dev-builders \
+        BUILDX_MULTI_PLATFORM_BUILD=true \
+        IMAGE_REGISTRY=${{ inputs.dockerhub-image-registry }} \
+        IMAGE_NAMESPACE=${{ inputs.dockerhub-image-namespace }} \
+        BUILDX_MULTIPLE_PLATFORMS_FOR_LEGACY=true

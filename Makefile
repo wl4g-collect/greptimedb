@@ -14,6 +14,7 @@ RUST_TOOLCHAIN ?= $(shell cat rust-toolchain.toml | grep channel | cut -d'"' -f2
 CARGO_REGISTRY_CACHE ?= ${HOME}/.cargo/registry
 ARCH := $(shell uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
 OUTPUT_DIR := $(shell if [ "$(RELEASE)" = "true" ]; then echo "release"; elif [ ! -z "$(CARGO_PROFILE)" ]; then echo "$(CARGO_PROFILE)" ; else echo "debug"; fi)
+BUILDX_MULTIPLE_PLATFORMS_FOR_LEGACY ?= false
 
 # The arguments for running integration tests.
 ETCD_VERSION ?= v3.5.9
@@ -138,6 +139,10 @@ dev-builder: multi-platform-buildx ## Build dev-builder image.
 	--build-arg="RUST_TOOLCHAIN=${RUST_TOOLCHAIN}" \
 	-f docker/dev-builder/${BASE_IMAGE}/Dockerfile \
 	-t ${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/dev-builder-${BASE_IMAGE}:${IMAGE_TAG} ${BUILDX_MULTI_PLATFORM_BUILD_OPTS} .
+
+.PHONY: legacy-dev-builders
+legacy-dev-builders: multi-platform-buildx ## Build legacy dev-builder images.
+	./docker/dev-builder/ubuntu/legacy/build.sh ${RUST_TOOLCHAIN} ${IMAGE_REGISTRY} ${IMAGE_NAMESPACE} ${BUILDX_BUILDER_NAME} ${BUILDX_MULTIPLE_PLATFORMS_FOR_LEGACY}
 
 .PHONY: multi-platform-buildx
 multi-platform-buildx: ## Create buildx multi-platform builder.

@@ -22,11 +22,16 @@ on:
         description: Release dev-builder-android image
         required: false
         default: false
+      release_legacy_dev_builders:
+        type: boolean
+        description: Release legacy dev-builder images
+        required: false
+        default: false
 
 jobs:
   release-dev-builder-images:
     name: Release dev builder images
-    if: ${{ inputs.release_dev_builder_ubuntu_image || inputs.release_dev_builder_centos_image || inputs.release_dev_builder_android_image }} # Only manually trigger this job.
+    if: ${{ inputs.release_dev_builder_ubuntu_image || inputs.release_dev_builder_centos_image || inputs.release_dev_builder_android_image || inputs.release_legacy_dev_builders }} # Only manually trigger this job.
     runs-on: ubuntu-20.04-16-cores
     steps:
       - name: Checkout
@@ -43,6 +48,7 @@ jobs:
           build-dev-builder-ubuntu: ${{ inputs.release_dev_builder_ubuntu_image }}
           build-dev-builder-centos: ${{ inputs.release_dev_builder_centos_image }}
           build-dev-builder-android: ${{ inputs.release_dev_builder_android_image }}
+          build-legacy-dev-builders: ${{ inputs.release_legacy_dev_builders }}
 
   release-dev-builder-images-cn: # Note: Be careful issue: https://github.com/containers/skopeo/issues/1874 and we decide to use the latest stable skopeo container.
     name: Release dev builder images to CN region

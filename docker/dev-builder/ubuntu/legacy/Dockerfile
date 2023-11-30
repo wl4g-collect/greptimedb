@@ -1,13 +1,14 @@
-# Use the legacy glibc 2.28.
-FROM ubuntu:18.10
+ARG VERSION
+FROM ubuntu:${VERSION}
 
 ENV LANG en_US.utf8
 WORKDIR /greptimedb
 
+ARG ADJECTIVE
 # Use old-releases.ubuntu.com to avoid 404s: https://help.ubuntu.com/community/EOLUpgrades.
-RUN echo "deb http://old-releases.ubuntu.com/ubuntu/ cosmic main restricted universe multiverse\n\
-deb http://old-releases.ubuntu.com/ubuntu/ cosmic-updates main restricted universe multiverse\n\
-deb http://old-releases.ubuntu.com/ubuntu/ cosmic-security main restricted universe multiverse" > /etc/apt/sources.list
+RUN echo "deb http://old-releases.ubuntu.com/ubuntu/ ${ADJECTIVE} main restricted universe multiverse\n\
+deb http://old-releases.ubuntu.com/ubuntu/ ${ADJECTIVE}-updates main restricted universe multiverse\n\
+deb http://old-releases.ubuntu.com/ubuntu/ ${ADJECTIVE}-security main restricted universe multiverse" > /etc/apt/sources.list
 
 # Install dependencies.
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \

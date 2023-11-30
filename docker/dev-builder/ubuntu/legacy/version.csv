@@ -1,0 +1,12 @@
+Version,Adjective,Animal,GlibcVersion,OnlyAMD64
+12.10,quantal,quetzal,2.15,true
+13.10,saucy,salamander,2.17,true
+14.10,utopic,unicorn,2.19,true
+15.04,vivid,vervet,2.21,true
+16.04,xenial,xerus,2.23,false
+17.04,zesty,zapus,2.24,false
+17.10,artful,aardvark,2.26,false
+18.04,bionic,beaver,2.27,false
+18.10,cosmic,cuttlefish,2.28,false
+19.04,disco,dingo,2.29,false
+19.10,eoan,ermine,2.30,false
